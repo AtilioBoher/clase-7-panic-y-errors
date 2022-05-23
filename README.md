@@ -1,0 +1,1 @@
+estos son los ejercicios de errores y panics
