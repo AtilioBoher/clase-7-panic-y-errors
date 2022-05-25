@@ -31,7 +31,7 @@ func openFile(fileName string) *os.File {
 
 func generateIdNumber() (int, error) {
 	randNum := rand.Intn(max-min) + min
-	randNum = 3 // uncomment this line to test the panic
+	// randNum = 3 // uncomment this line to test the panic
 	if randNum < min || randNum > max {
 		return 0, fmt.Errorf("el número de legajo generado es %d, el cual se encuentra fuera del rango permitido (%d-%d)", randNum, min, max)
 	}
@@ -39,14 +39,16 @@ func generateIdNumber() (int, error) {
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())    // this is here to have a diferent auto generated ID each time we run the program
-	myFile := openFile("customers.txt") // the correct way to type the path is like this "eje2/customers.txt"
-	defer myFile.Close()
-	fmt.Println("la ejecución del programa sigue")
+	rand.Seed(time.Now().UnixNano()) // this is here to have a different auto generated ID each time we run the program
 
 	id, err := generateIdNumber()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(id)
+	fmt.Printf("se generó el siguiente legajo: %d", id)
+
+	myFile := openFile("eje2/customers.txt") // the correct way to type the path is like this "eje2/customers.txt"
+	defer myFile.Close()
+	fmt.Println("la ejecución del programa sigue")
+
 }
