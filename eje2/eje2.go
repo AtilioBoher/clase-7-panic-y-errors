@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -13,6 +14,14 @@ const max = 99999
 
 //----------------------------------
 
+type cliente struct {
+	legajo     int
+	nombYApell string
+	dni        int
+	telef      int
+	domic      string // domicilio
+}
+
 func openFileRecoverFunc() {
 	if r := recover(); r != nil {
 		fmt.Println(r)
@@ -20,7 +29,7 @@ func openFileRecoverFunc() {
 }
 
 func openFile(fileName string) *os.File {
-	myFile, err := os.Open(fileName)
+	myFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_APPEND, 0660)
 	defer fmt.Println("Ejecución finalizada")
 	defer openFileRecoverFunc()
 	if err != nil {
@@ -38,6 +47,19 @@ func generateIdNumber() (int, error) {
 	return randNum, nil
 }
 
+func addClient(c cliente) {
+	f := openFile("eje2/customers.txt") // the correct way to type the path is like this "eje2/customers.txt"
+	defer f.Close()
+
+	if _, err := f.Write([]byte(strconv.Itoa(c.legajo) + "\n" +
+		c.nombYApell + "\n" +
+		strconv.Itoa(c.dni) + "\n" +
+		strconv.Itoa(c.telef) + "\n" +
+		c.domic + "\n\n")); err != nil {
+		fmt.Println(err)
+	}
+}
+
 func main() {
 	rand.Seed(time.Now().UnixNano()) // this is here to have a different auto generated ID each time we run the program
 
@@ -45,10 +67,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("se generó el siguiente legajo: %d", id)
+	fmt.Printf("se generó el siguiente legajo: %d \n", id)
 
-	myFile := openFile("eje2/customers.txt") // the correct way to type the path is like this "eje2/customers.txt"
-	defer myFile.Close()
-	fmt.Println("la ejecución del programa sigue")
-
+	var cliente1 cliente
+	cliente1.legajo, _ = generateIdNumber()
+	cliente1.nombYApell = "un nombre y apellido"
+	cliente1.dni = 40358487
+	cliente1.telef = 15783828
+	cliente1.domic = "calle tanto"
+	addClient(cliente1)
 }
