@@ -22,6 +22,15 @@ type cliente struct {
 	domic      string // domicilio
 }
 
+func generateIdNumber() (int, error) {
+	randNum := rand.Intn(max-min) + min
+	// randNum = 3 // uncomment this line to test the panic
+	if randNum < min || randNum > max {
+		return 0, fmt.Errorf("el número de legajo generado es %d, el cual se encuentra fuera del rango permitido (%d-%d)", randNum, min, max)
+	}
+	return randNum, nil
+}
+
 func openFileRecoverFunc() {
 	if r := recover(); r != nil {
 		fmt.Println(r)
@@ -38,26 +47,20 @@ func openFile(fileName string) *os.File {
 	return myFile
 }
 
-func generateIdNumber() (int, error) {
-	randNum := rand.Intn(max-min) + min
-	// randNum = 3 // uncomment this line to test the panic
-	if randNum < min || randNum > max {
-		return 0, fmt.Errorf("el número de legajo generado es %d, el cual se encuentra fuera del rango permitido (%d-%d)", randNum, min, max)
-	}
-	return randNum, nil
-}
-
 func addClient(c cliente) {
-	f := openFile("eje2/customers.txt") // the correct way to type the path is like this "eje2/customers.txt"
+	f := openFile("tomers.txt") // the correct way to type the path is like this "eje2/customers.txt"
 	defer f.Close()
 
-	if _, err := f.Write([]byte(strconv.Itoa(c.legajo) + "\n" +
-		c.nombYApell + "\n" +
-		strconv.Itoa(c.dni) + "\n" +
-		strconv.Itoa(c.telef) + "\n" +
-		c.domic + "\n\n")); err != nil {
-		fmt.Println(err)
+	if f != nil {
+		if _, err := f.Write([]byte(strconv.Itoa(c.legajo) + "\n" +
+			c.nombYApell + "\n" +
+			strconv.Itoa(c.dni) + "\n" +
+			strconv.Itoa(c.telef) + "\n" +
+			c.domic + "\n\n")); err != nil {
+			fmt.Println(err)
+		}
 	}
+
 }
 
 func main() {
@@ -76,4 +79,5 @@ func main() {
 	cliente1.telef = 15783828
 	cliente1.domic = "calle tanto"
 	addClient(cliente1)
+	fmt.Println("el programa sigue")
 }
