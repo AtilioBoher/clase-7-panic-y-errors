@@ -1,0 +1,12 @@
+Legajo: 93217
+Nombre y Apellido: un nombre y apellido
+DNI: 40358487
+Telefono: 15783828
+Domicilio: calle tanto
+
+Legajo: 75058
+Nombre y Apellido: un nombre y apellido
+DNI: 40358487
+Telefono: 15783828
+Domicilio: calle tanto
+
