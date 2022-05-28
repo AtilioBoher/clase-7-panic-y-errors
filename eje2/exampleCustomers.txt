@@ -22,21 +22,3 @@ DNI: 40358486
 Telefono: 15783825
 Domicilio: calle tanto 4
 
-Legajo: 11351
-Nombre y Apellido: some new name
-DNI: 41589358
-Telefono: 68465
-Domicilio: slfkjas sdf
-
-Legajo: 60576
-Nombre y Apellido: sdf sdfsdf
-DNI: 48962
-Telefono: 564
-Domicilio: hskdfh skdhf
-
-Legajo: 83688
-Nombre y Apellido: lsf lsdjf ls
-DNI: 157935
-Telefono: 354
-Domicilio: some address 2
-
