@@ -14,6 +14,7 @@ import (
 // constants and global variables
 const min = 10000
 const max = 99999
+const path = "eje2/customers.txt" // the correct way to type the path is like this "eje2/customers.txt"
 
 var didErrorOccurred bool = false
 
@@ -42,16 +43,17 @@ func generateIdNumber() (int, error) {
 }
 
 func checkIfIdNumberExist(id int) bool {
-	aux, err := os.ReadFile("eje2/customers.txt")
+	aux, err := os.ReadFile(path)
+	defer openFileRecoverFunc()
 	if err != nil {
-		fmt.Println(err)
+		panic("Error: el archivo indicado no fue encontrado o está dañado")
 	}
 	data := string(aux)
 	return strings.Contains(data, "Legajo: "+strconv.Itoa(id))
 }
 
 func checkIfClientExist(c cliente) bool {
-	aux, err := os.ReadFile("eje2/customers.txt")
+	aux, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -82,25 +84,21 @@ func isClientNull(c cliente) error {
 func openFileRecoverFunc() {
 	if r := recover(); r != nil {
 		fmt.Println(r)
+		didErrorOccurred = true
 	}
 }
 
-func openFile(fileName string) *os.File {
-	myFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_APPEND, 0660)
+func addClient(c cliente) {
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_APPEND, 0660)
 	defer fmt.Println("Ejecución finalizada")
+	defer f.Close()
 	defer openFileRecoverFunc()
 	if err != nil {
 		panic("Error: el archivo indicado no fue encontrado o está dañado")
 	}
-	return myFile
-}
-
-func addClient(c cliente) {
-	f := openFile("eje2/customers.txt") // the correct way to type the path is like this "eje2/customers.txt"
-	defer f.Close()
 
 	if f != nil {
-		if _, err := f.Write([]byte("Legajo: " + strconv.Itoa(c.legajo) + "\n" +
+		if _, err = f.Write([]byte("Legajo: " + strconv.Itoa(c.legajo) + "\n" +
 			"Nombre y Apellido: " + c.nombYApell + "\n" +
 			"DNI: " + strconv.Itoa(c.dni) + "\n" +
 			"Telefono: " + strconv.Itoa(c.telef) + "\n" +
@@ -187,5 +185,4 @@ func main() {
 	if aux == "s" {
 		showAllClients()
 	}
-
 }
